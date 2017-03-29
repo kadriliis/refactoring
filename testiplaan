@@ -1,0 +1,69 @@
+Ärinõue: autot saab rentida alates 18. eluaastast 
+	Vajalikud testid:
+		17-aastane ei saa autot rentida 
+			-- sisendite kombinatsioon: vanus: 17, [...] 
+			-- oodatav väljund: Exception
+		18-aastane saab autot rentida 
+			-- sisendite kombinatsioon: vanus: 18, [...] 
+			-- oodatav väljund: hind 18-aastasele XXX EUR
+
+Ärinõue: 18-21-aastanesaab rentida ainult 1 klassi autosid
+	Vajalikud testid:
+		18-21-aastane ei saa rentida 2-5 klassi autosid
+			-- sisendite kombinatsioon: vanus: 21, [...]
+			-- oodatav väljund: Exception
+		22 ja vanemad saavad rentida kõiki autosid
+			-- sisendite kombinatsioon: vanus: 22, [...]
+			-- oodatav väljund: hind 22-aastasele XXX EUR
+			
+Ärinõue: Rendi maksimaalne hind on 1000 eurot päevas
+	Vajalikud testid:
+		Hind ei saa olla üle 1000€ päevas
+			-- sisendite kombinatsioon: hind > 1000.01 [...]
+			-- oodatav väljund: hind=1000.00
+		Hind on alla 1000€ päevas
+			-- sisendite kombinatsioon: Hind = 1000.00 [...]
+			-- oodatav väljund: hind 1000€
+			
+Ärinõue: Rendi minimaalne hind on juhi vanus
+	Vajalikud testid:
+		Minimaalne hind ei ole võrdne vanusega
+			-- sisendite kombinatsioon: vanus: 21, hind: 16
+			-- oodatav väljund: Exception
+		Minimaalne hind on võrdne vanusega
+			-- sisendite kombinatsioon: vanus: 21, hind: 21
+			-- oodatav väljund: hind 21€
+			
+Ärinõue: Klassides 4 ja 5 on hind 50% kallim, kui juht on 25 või noorem (v.a. madalhooajal)
+	Vajalikud testid:
+		Klassides 4 ja 5 on hind kallim (kõrghooaeg) kui juht on 25 või noorem
+			-- sisendite kombinatsioon: vanus: 25, hooaeg: kõrghooaeg
+			-- oodatav väljund: hind * 0,5 
+		Klassides 4 ja 5 on hind sama (madalhooaeg) kui juht on 25 või noorem
+			-- sisendite kombinatsioon: vanus: 25, hooaeg: madalhooaeg
+			-- oodatav väljund: hind
+		Klassides 4 ja 5 on hind kallim kui juht on 25 või noorem
+			-- sisendite kombinatsioon: vanus: 26, hooaeg: kõrghooaeg
+			-- oodatav väljund: hind
+			
+Ärinõue: Rentida ei saa isikud, kellel on juhiluba olnud alla aasta. Kui juhiluba on olnud alla kolme aasta, siis on rendi hind 30% suurem
+	Vajalikud testid:
+		Juhiluba on olnud alla aasta
+			-- sisendite kombinatsioon: juhilubaOnOlnud: 1
+			-- oodatav väljund: Exception
+		Juhiluba on olnud alla kolme aasta
+			-- sisendite kombinatsioon: juhilubaOnOlnud: 3
+			-- oodatav väljund: hind*0,3
+		Juhiluba on olnud üle kolme aasta
+			-- sisendite kombinatsioon: juhilubaOnOlnud: 4
+			-- oodatav väljund: hind
+			
+Ärinõue: Kui isik on põhjustanud viimase aasta jooksul liiklusõnnestusi ja isik on alla 30 aasta vana, siis lisandub rendi ööpäevahinnale 15 eurot.
+	Vajalikud testid:
+		Isik on põhjustanud viimase aasta jooksul liiklusõnnestusi
+			-- sisendite kombinatsioon: õnnetusiViimaseAastaJooksul: 1,	vanus: 31
+			-- oodatav väljund: hind
+		Isik on põhjustanud viimase aasta jooksul liiklusõnnestusi ja on alla 30 aastavana
+			-- sisendite kombinatsioon: õnnetusiViimaseAastaJooksul: 1,	vanus: 30
+			-- oodatav väljund: hind + 15
+			
